@@ -1,0 +1,2 @@
+def avltree():
+    return AVLTree()
