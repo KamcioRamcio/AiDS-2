@@ -51,7 +51,7 @@ def chosenTree(treeName, tree, root):
         elif command == 'remove':
             keys = list(map(int, input('remove> ').split()))
             for key in keys:
-                root = tree.delete(root, key)
+                tree.delete(key)
         elif command == 'findMinMax':
             minTree = tree.minValueNode(root).key
             maxTree = tree.maxValueNode(root).key
