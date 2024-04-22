@@ -1,9 +1,7 @@
 # Dałem tu Quicksort żeby posortować tablice bo do AVL trzeba posortowaną rosnoąco tablice
 #masz link żeby sobie wizułalizować jak wyglada BST które wpisujesz
 vizualization = "https://www.cs.usfca.edu/~galles/visualization/BST.html"
-
 import random
-
 random_array = random.sample(range(1, 1001), 10)
 my_array=[7,8,1,2,22,58,3,47,121]
 
@@ -46,23 +44,27 @@ def Mediana(arr):
 #print(Mediana(random_array))
 
 # No tu sobie zrobiłem drzewo binarne BST, masz ziutka value który ci jakby definiuje aktuanly węzeł, left i right to są dzieci
+
 class TreeNode:
-    def __init__(self, value):
+    def __init__(self, value=None):
         self.value = value
         self.left = None
         self.right = None
 # No tu sobie zrobiłem funkcje insert która dodaje węzeł do drzewa
     def insert(self,value):
-        if value < self.value:
-            if self.left is None:
-                self.left = TreeNode(value)
-            else:
-                self.left.insert(value)
+        if self.value is None:
+            self.value = value
         else:
-            if self.right is None:
-                self.right = TreeNode(value)
-            else:
-                self.right.insert(value)
+            if value < self.value:
+                if self.left is None:
+                    self.left = TreeNode(value)
+                else:
+                    self.left.insert(value)
+            else: 
+                if self.right is None:
+                    self.right = TreeNode(value)
+                else:
+                    self.right.insert(value)
 #Tera troche nie w kolejności ale czytam i ogladam i tak tłumaczyli to tak pisze, inna sprawa że potem po prsotu inaczej będziemy wywoływać to
 #in_order ---- lewy, korzeń, prawy
     def in_order(self):
@@ -100,14 +102,3 @@ class TreeNode:
         else:
            return True
 
-
-tree = TreeNode(my_array[0])  
-for i in range(1, len(my_array)):  
-    tree.insert(my_array[i]) 
-
-tree.in_order()  
-print("in_order")
-tree.post_order()  
-print("post_order")
-tree.pre_order()  
-print("pre_order")
