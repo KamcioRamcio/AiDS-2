@@ -143,7 +143,7 @@ class TreeNode:
         self.post_order_delete(node.right)
         self.delete(node.value)
         print("Usunięto: ", node.value)
-        print(tree.post_order())
+        print(self.post_order())
         return   
         
 

@@ -43,7 +43,7 @@ def chosenTree(treeName, tree, root):
             for key in keys: 
                 tree.insert(key)
         elif command == 'delete':
-                root = None
+                tree.delete_all()
                 print(f"All nodes have been deleted from the {treeName} tree.")
         elif command == 'rebalance':
             root = tree.rebalance(root)
