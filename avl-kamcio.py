@@ -23,7 +23,16 @@ def Partition(arr, start, end):
     arr[start], arr[right] = arr[right], arr[start]
     return right
 
-#Wybierz środkowy element ciągu (= mediana ) jako element bieżący E
+my_array=[7,8,1,2,22,58,3,47,121]
 
-def Mediana(arr):
-    return arr[len(arr)//2]
+
+
+class TreeNode:
+    def __init__(self, value=None):
+        self.value = value
+        self.left = None
+        self.right = None
+    #Wybierz środkowy element ciągu (= mediana ) jako element bieżący E
+    def Mediana(arr):
+        return arr[len(arr)//2]
+    def insert(self,value):
