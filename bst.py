@@ -99,15 +99,61 @@ class TreeNode:
                 return self.right.find(value)
         else:
            return True
+    def smallest(self):
+        if self.left is None:
+            return self.value
+        else:
+            return self.left.smallest()
+    def largest(self):
+        if self.right is None:
+            return self.value
+        else:
+            return self.right.largest()
+    #usuwanie
+    def delete(self, value):
+        if value not in my_array:
+            print("Nie ma takiego elementu")
+            return False
+        if value < self.value:
+            if self.left:
+                self.left = self.left.delete(value)
+            return self
+        if value > self.value:
+            if self.right:
+                self.right = self.right.delete(value)
+            return self
+        if not self.left:
+            return self.right
+        if not self.right:
+            return self.left
+        min_value = self.right.smallest()
+        self.value = min_value
+        self.right = self.right.delete(min_value)
+        return self
+    
+    def delete_all(self):
+            self.post_order_delete(self)
+            
+    def post_order_delete(self, node):
+        if node is None:
+            return
+        self.post_order_delete(node.left)
+        self.post_order_delete(node.right)
+        self.delete(node.value)
+        print("Usunięto: ", node.value)
+        print(tree.post_order())
+        return 
+        
+        
+        
 
 
 tree = TreeNode(my_array[0])  
 for i in range(1, len(my_array)):  
     tree.insert(my_array[i]) 
 
-tree.in_order()  
-print("in_order")
+
+
 tree.post_order()  
-print("post_order")
-tree.pre_order()  
-print("pre_order")
+tree.delete_all()
+
