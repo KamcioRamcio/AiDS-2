@@ -1,4 +1,5 @@
 from bst import TreeNode as BST
+from avl import TreeNode as AVL
 import os
 import argparse
 parser = argparse.ArgumentParser()
@@ -22,8 +23,8 @@ def chosenTree(treeName, tree, root):
             print("Delete - delete all nodes from the trees")
             print("Rebalance - rebalance the AVL tree")
             print("Remove - remove a node from the trees")
-            print("FindMinMax - find the minimum and maximum values in the trees")
-            print("SortAndMedian - sort the trees and find the median")
+            print("MinMax - find the minimum and maximum values in the trees")
+            print("Height- return the height of the tree")
             print("-------------")
             continue
         if command == 'exit':
@@ -52,25 +53,25 @@ def chosenTree(treeName, tree, root):
             keys = list(map(int, input('remove> ').split()))
             for key in keys:
                 tree.delete(key)
-        elif command == 'findMinMax':
-            minTree = tree.minValueNode(root).key
-            maxTree = tree.maxValueNode(root).key
-            print(f"{treeName} tree: Min = {minTree}, Max = {maxTree}")
-        elif command == 'sortAndMedian':
-            print(f"{treeName} tree sorted:")
-            tree.inOrder(root)
-            print(f"\nMedian: {tree.findMedian(root)}")
+        elif command == 'find':
+            znajdzka = int(input('find> '))
+            print(tree.find(znajdzka))
+        elif command == 'minmax':
+            print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n")  
+        elif command == 'height':
+            
+            print("Height: ",tree.get_height())
         else:
             print("Unknown command. Please try again. Type help for more information.")
 
 def main():
-    #avl_tree = avl.AVLTree()
+    avl_tree = AVL()
     bst_tree = BST()
-    #avl_root = None
+    avl_root = None
     bst_root = None
 
-    #if args.avl:
-     #   chosenTree("AVL", avl _tree, avl_root)
+    if args.avl:
+        chosenTree("AVL", avl_tree, avl_root)
     if args.bst:
         chosenTree("BST", bst_tree, bst_root)
         # elif command == 'print':
