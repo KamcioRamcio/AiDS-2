@@ -11,6 +11,7 @@ class TreeNode:
         self.value = value
         self.left = None
         self.right = None
+        self.height = 1
 
     def insert(self,value):
         if self.value is None:
@@ -110,5 +111,34 @@ class TreeNode:
                 node.value = None
             del node
             
+    def right_rotate(self, root):
+        current = root
+        while current:
+            if current.left:  
+                pivot = current.left  
+                current.left = pivot.right 
+                pivot.right = current  
+                return pivot 
+            else:
+                current = current.right  
+        return root  
+    
+    def get_height(self, root):
+        if root is None:
+            return 0
+        else:
+            left_height = self.get_height(root.left)  
+            right_height = self.get_height(root.right)  
+            return max(left_height, right_height) + 1 
         
-
+    def left_rotate(self, root):
+        current = root 
+        while current:
+            if current.right and self.get_height(current.left.right) % 2 != 0:
+                pivot = current.left
+                current.left = pivot.right
+                pivot.right = current
+                return pivot
+            else:
+                current = current.right
+        return root
