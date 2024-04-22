@@ -101,13 +101,13 @@ class TreeNode:
            return True
 
 
-tree = TreeNode(my_array[0])  # Instantiate a TreeNode object and assign it to the variable "tree"
-for i in range(1, len(my_array)):  # Start the loop from index 1
-    tree.insert(my_array[i])  # Insert each element into the tree
+tree = TreeNode(my_array[0])  
+for i in range(1, len(my_array)):  
+    tree.insert(my_array[i]) 
 
-tree.in_order()  # Call the in_order() method on the tree object
+tree.in_order()  
 print("in_order")
-tree.post_order()  # Call the post_order() method on the tree object
+tree.post_order()  
 print("post_order")
-tree.pre_order()  # Call the pre_order() method on the tree object
+tree.pre_order()  
 print("pre_order")
