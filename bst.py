@@ -117,7 +117,3 @@ for i in range(1, len(my_array)):
     tree.insert(my_array[i]) 
 
 
-
-tree.post_order()  
-tree.delete_all()
-
