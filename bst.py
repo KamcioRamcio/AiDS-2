@@ -4,7 +4,8 @@ vizualization = "https://www.cs.usfca.edu/~galles/visualization/BST.html"
 
 import random
 
-random_array = random.sample(range(1, 1001), 50)
+random_array = random.sample(range(1, 1001), 10)
+my_array=[7,8,1,2,22,58,3,47,121]
 
 def QuickSortLeftPivot(arr, start, end):
     if start < end:
@@ -84,17 +85,29 @@ class TreeNode:
         if self.right:
             self.right.post_order()
         print(self.value)
+#Znajdowanie węzła
+    def find(self, value):
+        if value < self.value:
+            if self.left is None:
+                return False
+            else:
+                return self.left.find(value)
+        elif value > self.value:
+            if self.right is None:
+                return False
+            else:
+                return self.right.find(value)
+        else:
+           return True
 
-tree = TreeNode(10)
-tree.insert(5)
-tree.insert(15)
-tree.insert(8)
-tree.insert(3)
-tree.insert(7)
-tree.insert(12)
-tree.insert(17)
-tree.in_order()
-tree.pre_order()
-tree.post_order()
 
+tree = TreeNode(my_array[0])  # Instantiate a TreeNode object and assign it to the variable "tree"
+for i in range(1, len(my_array)):  # Start the loop from index 1
+    tree.insert(my_array[i])  # Insert each element into the tree
 
+tree.in_order()  # Call the in_order() method on the tree object
+print("in_order")
+tree.post_order()  # Call the post_order() method on the tree object
+print("post_order")
+tree.pre_order()  # Call the pre_order() method on the tree object
+print("pre_order")
