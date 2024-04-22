@@ -144,18 +144,7 @@ class TreeNode:
         self.delete(node.value)
         print("Usunięto: ", node.value)
         print(tree.post_order())
-        return 
-        
-        
+        return   
         
 
-
-tree = TreeNode(my_array[0])  
-for i in range(1, len(my_array)):  
-    tree.insert(my_array[i]) 
-
-
-
-tree.post_order()  
-tree.delete_all()
 
