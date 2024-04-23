@@ -119,11 +119,95 @@ class TreeNode:
             if node.value:
                 node.value = None
             del node
-    
+    def right_rotation(self, node):
+        pivot = node.left
+        node.left = pivot.right
+        pivot.right = node
+        return pivot
+    def left_rotation(self, node):
+        pivot = node.right
+        node.right = pivot.left
+        pivot.left = node
+        return pivot
+    def create_vine(self,root):
+        vine_head = TreeNode()  # Tworzymy nowy węzeł, który będzie głową winorośli
+        vine_tail = vine_head  # Ustawiamy ogon winorośli na głowę na początku
+        current = root
+        
+        while current:
+            if current.left:  # Jeśli bieżący węzeł ma lewe poddrzewo
+                # Wykonujemy rotację w prawo i aktualizujemy bieżący węzeł
+                current = self.right_rotation(current)
+                vine_tail.right = current  # Podpinamy bieżący węzeł do ogona winorośli
+                vine_tail = current  # Aktualizujemy ogon winorośli
+                current = current.right  # Przechodzimy do prawego dziecka
+            else:
+                # Jeśli bieżący węzeł nie ma lewego poddrzewa, przechodzimy do prawego dziecka
+                vine_tail = current
+                current = current.right
+                
+        return vine_head.right  # Zwracamy głowę winorośli
+       
 
 
-my_array = [7, 8, 1, 2, 22, 58, 3, 47, 121]
-# x = QuickSortLeftPivot(my_array, 0, len(my_array) - 1)
-# tree = TreeNode()
-# tree.insert(x)
 
+
+def tikz_tree_helper(node, level=0, pos=0, positions=None):
+    if positions is None:
+        positions = {}  # Definiujemy słownik positions, jeśli nie został jeszcze zdefiniowany
+    if node is None:
+        return "", pos
+    # Check if the position is already occupied
+    while (pos, -level) in positions:
+        # If it is, shift the position to the right
+        pos += 1
+    # Record the position of the current node
+    positions[(pos, -level)] = node.value  # Poprawiamy odwołanie do wartości węzła
+    result = "\\node at ({},{}) {{{}}};\n".format(pos, -level, node.value)  # Poprawiamy odwołanie do wartości węzła
+    if node.left:
+        left_result, left_pos = tikz_tree_helper(node.left, level+1, pos-1, positions)
+        result += left_result
+        result += "\\draw ({},{}) -- ({},{});\n".format(pos, -level, left_pos, -(level+1))
+    if node.right:
+        right_result, right_pos = tikz_tree_helper(node.right, level+1, pos+1, positions)
+        result += right_result
+        result += "\\draw ({},{}) -- ({},{});\n".format(pos, -level, right_pos, -(level+1))
+    return result, pos
+
+def tikz_tree(node):
+    result, _ = tikz_tree_helper(node)
+    return result
+
+def writeTikzToFile(filename, text):
+    with open(filename, 'w') as file:
+        file.write("\\documentclass{standalone}\n")
+        file.write("\\usepackage{tikz}\n")
+        file.write("\\begin{document}\n")
+        file.write("\\begin{tikzpicture}[\n")
+        file.write("level distance=1cm,\n")
+        file.write("level 1/.style={sibling distance=3cm},\n")
+        file.write("level 2/.style={sibling distance=1.5cm},\n")
+        file.write("level 3/.style={sibling distance=1cm}\n")
+        file.write("]\n")
+    file.close()
+    with open(filename, 'a') as file:
+        file.write(text)
+    file.close()
+    with open(filename, 'a') as file:
+        file.write("\\end{tikzpicture}\n")
+        file.write("\\end{document}\n")
+        
+#my_array = [7, 8, 1, 2, 22, 58, 3, 47, 121,12,13,1,5,999,49,53,32]
+#x = QuickSortLeftPivot(my_array, 0, len(my_array) - 1)
+#tree = TreeNode()
+#tree.insert(x)
+#tree.in_order()
+#tree.create_vine(tree)
+#
+#root=tree
+#
+## Wygenerowanie kodu TikZ dla drzewa
+#tikz_code = tikz_tree(root)
+#
+## Zapisanie kodu TikZ do pliku
+#writeTikzToFile("tree.tex", tikz_code)
