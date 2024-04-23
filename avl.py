@@ -1,169 +1,180 @@
-def QuickSortLeftPivot(arr, start, end):
-    if start < end:
-        pivot_index = Partition(arr, start, end)
-        QuickSortLeftPivot(arr, start, pivot_index - 1)
-        QuickSortLeftPivot(arr, pivot_index + 1, end)
-    return arr
-
-def Partition(arr, start, end):
-    pivot = arr[start]
-    left = start + 1
-    right = end
-    
-    while True:
-        while left <= right and arr[left] <= pivot:
-            left += 1
-        while left <= right and arr[right] >= pivot:
-            right -= 1
-        if left > right:
-            break
-        else:
-            arr[left], arr[right] = arr[right], arr[left]
-    
-    arr[start], arr[right] = arr[right], arr[start]
-    return right
-
-def Mediana(arr):
-    return arr[len(arr)//2]
-
-class TreeNode:
+class Node:
     def __init__(self, value=None):
         self.value = value
         self.left = None
         self.right = None
-        
+        self.parent = None
+        self.height = 0
+
+class AVL:
+    def __init__(self):
+        self.root = None
+
     def insert(self, arr):
         if len(arr) == 0:
+            return
+        arr.sort()  # Sortujemy tablicę, aby umożliwić łatwiejsze tworzenie drzewa AVL
+        self.root = self._create_balanced_avl(arr, 0, len(arr)-1)
+
+    def _create_balanced_avl(self, arr, start, end):
+        if start > end:
             return None
-        else:
-            self.value = Mediana(arr)
-            left = arr[:len(arr)//2]
-            right = arr[len(arr)//2+1:]
-            if len(left) > 0:
-                self.left = TreeNode()
-                self.left.insert(left)
-            if len(right) > 0:
-                self.right = TreeNode()
-                self.right.insert(right)
-                
-    def in_order(self):
-        if self.left:
-            self.left.in_order()
-        print(self.value)
-        if self.right:
-            self.right.in_order()
-    def pre_order(self):
-        print(self.value)
-        if self.left:
-            self.left.pre_order()
-        if self.right:
-            self.right.pre_order()
-    def post_order(self):
-        if self.left:
-            self.left.post_order()
-        if self.right:
-            self.right.post_order()
-        print(self.value)
-    def find(self, value):
-        if value < self.value:
-            if self.left is None:
-                return False
-            else:
-                return self.left.find(value)
-        elif value > self.value:
-            if self.right is None:
-                return False
-            else:
-                return self.right.find(value)
-        else:
-            return True
-    def smallest(self):
-        if self.left is None:
-            return self.value
-        else:
-            return self.left.smallest()
-    def largest(self):
-        if self.right is None:
-            return self.value
-        else:
-            return self.right.largest()
-    def delete(self, value):
-        if value < self.value:
-            if self.left is not None:
-                self.left = self.left.delete(value)
-        elif value > self.value:
-            if self.right is not None:
-                self.right = self.right.delete(value)
-        else:
-            if self.left is None and self.right is None:
-                return None
-            elif self.left is None:
-                return self.right
-            elif self.right is None:
-                return self.left
-            else:
-                self.value = self.right.smallest()
-                self.right = self.right.delete(self.value)
-        return self
-    def delete_all(self):
-            self.post_order_delete(self)
-    def post_order_delete(self, node):
-        if node:
-            self.post_order_delete(node.left)
-            self.post_order_delete(node.right)
-            print("Usuwam węzeł", node.value)
-            if node.left:
-                node.left = None
-            if node.right:
-                node.right = None
-            if node.value:
-                node.value = None
-            del node
+        
+        mid = (start + end) // 2
+        root = Node(arr[mid])
+
+        root.left = self._create_balanced_avl(arr, start, mid - 1)
+        if root.left:
+            root.left.parent = root
+
+        root.right = self._create_balanced_avl(arr, mid + 1, end)
+        if root.right:
+            root.right.parent = root
+
+        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
+        return root
+    
+    
+    def get_height(self, node):
+        if not node:
+            return 0
+        return node.height
+
+    def in_order(self, node=None):
+        if node is None:
+            node = self.root
+        
+        if node.left:
+            self.in_order(node.left)
+        print(node.value)
+        if node.right:
+            self.in_order(node.right)
+
     def right_rotation(self, node):
+        print("Rotacja w prawo wokół", node.value)
         pivot = node.left
         node.left = pivot.right
         pivot.right = node
+        node.height = 1 + max(self.getHeight(node.left), self.getHeight(node.right))
+        pivot.height = 1 + max(self.getHeight(pivot.left), self.getHeight(pivot.right))
+
         return pivot
-    def left_rotation(self, node):
-        pivot = node.right
-        node.right = pivot.left
-        pivot.left = node
-        return pivot
-    def create_vine(self,root):
-        vine_head = TreeNode()  # Tworzymy nowy węzeł, który będzie głową winorośli
-        vine_tail = vine_head  # Ustawiamy ogon winorośli na głowę na początku
-        current = root
+
+    def create_vine(self):
+        root = self.root
+        while root.left:
+            self.right_rotate(root)
+            root = root.parent
+
+    def balance_from_vine(self, size):
+        vine_height = int(size ** 0.5)
+        remaining_nodes = size - (2 ** vine_height - 1)
+        self.make_vine_balanced(vine_height)
+        for _ in range(remaining_nodes):
+            if self.root:
+                self.left_rotate(self.root)
+
+    def make_vine_balanced(self, size):
+        compression_point = size // 2
+        for _ in range(compression_point):
+            self.left_rotate(self.root)
+
+    def left_rotate(self, root):
+        sub_root = root.parent
+        right_child = root.right
+        if right_child is None:
+            return
+        root.right = right_child.left
+        if right_child.left:
+            right_child.left.parent = root
+        right_child.left = root
+        root.parent = right_child
+        right_child.parent = sub_root
+        if sub_root is None:
+            self.root = right_child
+        elif sub_root.left == root:
+            sub_root.left = right_child
+        else:
+            sub_root.right = right_child
+        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
+        right_child.height = 1 + max(self.get_height(right_child.left), self.get_height(right_child.right))
+    
+    def Biggest_Left(self, node):
+        while node.right:
+            node = node.right
+        return node
+    def get_balance(self, node):
+        if not node:
+            return 0
+        return self.get_height(node.left) - self.get_height(node.right)
+    
+    
+    
+    def delete(self, value , node):
+        if node is None:
+            return None
+        if value < node.value:
+            node.left = self.delete(value, node.left)
+        elif value > node.value:
+            node.right = self.delete(value, node.right)
+        else:
+            if not node.left and not node.right:
+                del node
+                return None
+            if not node.left:
+                temp = node.right
+                del node
+                return temp
+            if not node.right:
+                temp = node.left
+                del node
+                return temp
+            #-- Jeśli węzeł ma obu potomków to szukamy największego elementu w lewym poddrzewie --#
+            temp = self.Biggest_Left(node.left)
+            node.value = temp.value
+            node.left = self.delete(temp.value, node.left)
+        if not node:
+            return node
+        node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
+        balance = self.get_balance(node)
+
+        #-- patrz def get_balance --#
+        #-- Jeżeli jest większe niz 1 to znaczy że lewe poddrzewo jest większe --#
+        if balance > 1 and self.get_balance(node.left) >= 0:
+            return self.right_rotate(node)
+        #-- Jeżeli jest mniejsze niz 1 to znaczy że prawe poddrzewo jest większe --#
+        if balance < -1 and self.get_balance(node.right) <= 0:
+            return self.left_rotate(node)
+        #-- Jeżeli jest większe niz 1 to znaczy że lewe poddrzewo jest większe ale prawe poddrzewo tego poddrzewa jest większe --#
+        if balance > 1 and self.get_balance(node.left) < 0:
+            node.left = self.left_rotate(node.left)
+            return self.right_rotate(node)
+        #-- Jeżeli jest mniejsze niz 1 to znaczy że prawe poddrzewo jest większe ale lewe poddrzewo tego poddrzewa jest większe --#
+        if balance < -1 and self.get_balance(node.right) > 0:
+            node.right = self.right_rotate(node.right)
+            return self.left_rotate(node)
         
-        while current:
-            if current.left:  # Jeśli bieżący węzeł ma lewe poddrzewo
-                # Wykonujemy rotację w prawo i aktualizujemy bieżący węzeł
-                current = self.right_rotation(current)
-                vine_tail.right = current  # Podpinamy bieżący węzeł do ogona winorośli
-                vine_tail = current  # Aktualizujemy ogon winorośli
-                current = current.right  # Przechodzimy do prawego dziecka
-            else:
-                # Jeśli bieżący węzeł nie ma lewego poddrzewa, przechodzimy do prawego dziecka
-                vine_tail = current
-                current = current.right
-                
-        return vine_head.right  # Zwracamy głowę winorośli
-       
+        return node
+	
 
 
 
+avl = AVL()
+avl.insert([7, 1, 2, 22, 58, 3, 47, 121,12])
+avl.in_order()
+
+avl.delete(22, avl.root)
+avl.in_order()
 
 def tikz_tree_helper(node, level=0, pos=0, positions=None):
     if positions is None:
-        positions = {}  # Definiujemy słownik positions, jeśli nie został jeszcze zdefiniowany
+        positions = {}
     if node is None:
         return "", pos
-    # Check if the position is already occupied
     while (pos, -level) in positions:
-        # If it is, shift the position to the right
         pos += 1
-    # Record the position of the current node
-    positions[(pos, -level)] = node.value  # Poprawiamy odwołanie do wartości węzła
-    result = "\\node at ({},{}) {{{}}};\n".format(pos, -level, node.value)  # Poprawiamy odwołanie do wartości węzła
+    positions[(pos, -level)] = node.value
+    result = "\\node at ({},{}) {{{}}};\n".format(pos, -level, node.value)
     if node.left:
         left_result, left_pos = tikz_tree_helper(node.left, level+1, pos-1, positions)
         result += left_result
@@ -173,6 +184,7 @@ def tikz_tree_helper(node, level=0, pos=0, positions=None):
         result += right_result
         result += "\\draw ({},{}) -- ({},{});\n".format(pos, -level, right_pos, -(level+1))
     return result, pos
+
 
 def tikz_tree(node):
     result, _ = tikz_tree_helper(node)
@@ -197,17 +209,11 @@ def writeTikzToFile(filename, text):
         file.write("\\end{tikzpicture}\n")
         file.write("\\end{document}\n")
         
-#my_array = [7, 8, 1, 2, 22, 58, 3, 47, 121,12,13,1,5,999,49,53,32]
-#x = QuickSortLeftPivot(my_array, 0, len(my_array) - 1)
-#tree = TreeNode()
-#tree.insert(x)
-#tree.in_order()
-#tree.create_vine(tree)
-#
-#root=tree
-#
-## Wygenerowanie kodu TikZ dla drzewa
-#tikz_code = tikz_tree(root)
-#
-## Zapisanie kodu TikZ do pliku
-#writeTikzToFile("tree.tex", tikz_code)
+        
+
+#Wygenerowanie kodu TikZ dla drzewa
+tikz_code = tikz_tree(avl.root)
+
+
+# Zapisanie kodu TikZ do pliku
+writeTikzToFile("tree.tex", tikz_code)

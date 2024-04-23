@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[
+level distance=1cm,
+level 1/.style={sibling distance=3cm},
+level 2/.style={sibling distance=1.5cm},
+level 3/.style={sibling distance=1cm}
+]
+\node at (0,0) {47};
+\node at (-1,-1) {12};
+\node at (-2,-2) {3};
+\draw (-1,-1) -- (-2,-2);
+\node at (0,-2) {22};
+\draw (-1,-1) -- (0,-2);
+\draw (0,0) -- (-1,-1);
+\node at (1,-1) {58};
+\node at (2,-2) {121};
+\draw (1,-1) -- (2,-2);
+\draw (0,0) -- (1,-1);
+\end{tikzpicture}
+\end{document}
