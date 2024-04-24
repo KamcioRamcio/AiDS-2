@@ -154,6 +154,14 @@ def chosenTree(treeName, tree, root):
             print(tree.find(znajdzka))
         elif command == 'minmax':
             print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n")  
+        
+        elif command == 'balance':
+            n = tree.count_nodes()
+            tree = tree.create_backbone()
+            tree = tree.balance_backbone(n)
+            # Now 'tree' should point to the root of the balanced tree
+            # You can print or draw the tree here
+        
         elif command == 'draw':
              #Wygenerowanie kodu TikZ dla drzewa
             if treeName == "AVL":

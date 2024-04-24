@@ -7,14 +7,14 @@ level 1/.style={sibling distance=3cm},
 level 2/.style={sibling distance=1.5cm},
 level 3/.style={sibling distance=1cm}
 ]
-\node at (0,0) {3};
+\node at (0,0) {4};
 \node at (-1,-1) {2};
 \node at (-2,-2) {1};
 \draw (-1,-1) -- (-2,-2);
+\node at (0,-2) {3};
+\draw (-1,-1) -- (0,-2);
 \draw (0,0) -- (-1,-1);
-\node at (1,-1) {6};
-\node at (0,-2) {4};
-\draw (1,-1) -- (0,-2);
+\node at (1,-1) {5};
 \draw (0,0) -- (1,-1);
 \end{tikzpicture}
 \end{document}
