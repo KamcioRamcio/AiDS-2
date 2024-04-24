@@ -1,5 +1,6 @@
 from bst import TreeNode as BST
-from avl import TreeNode as AVL
+
+import avl
 import os
 import argparse
 parser = argparse.ArgumentParser()
@@ -155,14 +156,19 @@ def chosenTree(treeName, tree, root):
             print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n")  
         elif command == 'draw':
              #Wygenerowanie kodu TikZ dla drzewa
-            tikz_code = tikz_tree(tree)
-            writeTikzToFile("tree.tex", tikz_code)
-            print("TikZ code has been generated and saved to tree.tex.")   
+            if treeName == "AVL":
+                tikz_code = tikz_tree(tree.root)
+                writeTikzToFile("tree.tex", tikz_code)
+                print("TikZ code has been generated and saved to tree.tex.")
+            elif treeName == "BST":
+                tikz_code = tikz_tree(tree)
+                writeTikzToFile("tree.tex", tikz_code)
+                print("TikZ code has been generated and saved to tree.tex.")   
         else:
             print("Unknown command. Please try again. Type help for more information.")
 
 def main():
-    avl_tree = AVL()
+    avl_tree = avl.AVL()
     bst_tree = BST()
     avl_root = None
     bst_root = None
