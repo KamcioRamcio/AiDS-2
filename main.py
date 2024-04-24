@@ -133,11 +133,11 @@ def chosenTree(treeName, tree, root):
                 keys = list(map(int, input('insert> ').split()))
                 for key in keys: 
                     tree.insert(key)
+            
             elif treeName == "AVL":
                 num_nodes = int(input('nodes> '))
                 keys = list(map(int, input('insert> ').split()))
-                for key in keys:
-                    root = tree.insert(keys)
+                tree.build_tree(keys)
         elif command == 'delete':
                 tree.delete_all()
                 print(f"All nodes have been deleted from the {treeName} tree.")
