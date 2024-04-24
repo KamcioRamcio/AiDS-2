@@ -27,20 +27,20 @@ class AVL:
         balance = self.get_balance(node)
 
         # Balansowanie drzewa po wstawieniu nowego węzła
-        if balance > 1 and value < node.left.value:
-            return self.right_rotate(node)
-        
-        if balance < -1 and value > node.right.value:
-            return self.left_rotate(node)
-        
-        if balance > 1 and value > node.left.value:
-            node.left = self.left_rotate(node.left)
-            return self.right_rotate(node)
-        
-        if balance < -1 and value < node.right.value:
-            node.right = self.right_rotate(node.right)
-            return self.left_rotate(node)
-        
+        #if balance > 1 and value < node.left.value:
+        #    return self.right_rotate(node)
+        #
+        #if balance < -1 and value > node.right.value:
+        #    return self.left_rotate(node)
+        #
+        #if balance > 1 and value > node.left.value:
+        #    node.left = self.left_rotate(node.left)
+        #    return self.right_rotate(node)
+        #
+        #if balance < -1 and value < node.right.value:
+        #    node.right = self.right_rotate(node.right)
+        #    return self.left_rotate(node)
+        #
         return node
     
     def build_tree(self, arr):
