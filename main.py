@@ -142,9 +142,6 @@ def chosenTree(treeName, tree, root):
         elif command == 'delete':
                 tree.delete_all()
                 print(f"All nodes have been deleted from the {treeName} tree.")
-        elif command == 'rebalance':
-            root = tree.rebalance(root)
-            print(f"{treeName} tree has been balanced.")
         elif command == 'remove':
             keys = list(map(int, input('remove> ').split()))
             for key in keys:
@@ -155,7 +152,7 @@ def chosenTree(treeName, tree, root):
         elif command == 'minmax':
             print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n")  
         
-        elif command == 'balance':
+        elif command == 'rebalance':
             n = tree.count_nodes()
             tree = tree.create_backbone()
             tree = tree.balance_backbone(n)
