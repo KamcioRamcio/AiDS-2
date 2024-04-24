@@ -159,8 +159,7 @@ def chosenTree(treeName, tree, root):
             n = tree.count_nodes()
             tree = tree.create_backbone()
             tree = tree.balance_backbone(n)
-            # Now 'tree' should point to the root of the balanced tree
-            # You can print or draw the tree here
+            
         
         elif command == 'draw':
              #Wygenerowanie kodu TikZ dla drzewa
