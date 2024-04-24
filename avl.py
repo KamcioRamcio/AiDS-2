@@ -204,7 +204,19 @@ class AVL:
             if node.value:
                 node.value = None
             del node
-
+    def smallest(self, node=None):
+        if node is None:
+            node = self.root
+        while node.left:
+            node = node.left
+        return node.value
+    def biggest(self, node=None):
+        if node is None:
+            node = self.root
+        while node.right:
+            node = node.right
+        return node.value
+    
 
 avl = AVL()
 avl.build_tree([7, 1, 2, 22, 58, 3, 47, 121, 12])
