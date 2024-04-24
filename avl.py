@@ -44,9 +44,17 @@ class AVL:
         return node
     
     def build_tree(self, arr):
-        for i in arr:
-            self.insert(i)
+        arr.sort()
+        self.root = self.build_avl(arr)
         return self.root
+    def build_avl(self, arr):
+        if not arr:
+            return None
+        mid = len(arr) // 2
+        root = Node(arr[mid])
+        root.left = self.build_avl(arr[:mid])
+        root.right = self.build_avl(arr[mid+1:])
+        return root
     
     def get_height(self, node):
         if not node:
@@ -198,11 +206,11 @@ class AVL:
             del node
 
 
-#avl = AVL()
-#avl.build_tree([7, 1, 2, 22, 58, 3, 47, 121, 12])
-#avl.in_order()
-#
-#avl.in_order()
+avl = AVL()
+avl.build_tree([7, 1, 2, 22, 58, 3, 47, 121, 12])
+avl.in_order()
+avl.delete(22)
+avl.in_order()
 
 
 def tikz_tree_helper(node, level=0, pos=0, positions=None):
