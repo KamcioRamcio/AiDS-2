@@ -75,9 +75,7 @@ class TreeNode:
             return self.right.largest()
     #usuwanie
     def delete(self, value):
-        if value not in my_array:
-            print("Nie ma takiego elementu")
-            return False
+        
         if value < self.value:
             if self.left:
                 self.left = self.left.delete(value)
@@ -123,7 +121,7 @@ class TreeNode:
                 current = current.right  
         return root  
     
-    def get_height(self, root):
+    def get_height(self, root=0):
         if root is None:
             return 0
         else:
