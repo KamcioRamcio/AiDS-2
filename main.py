@@ -6,6 +6,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-avl", action="store_true", help="Work on AVL tree")
 parser.add_argument("-bst", action="store_true", help="Work on BST tree")
+parser.add_argument("-file", help="Run commands from a file")
 args = parser.parse_args()
 CURRENT_DIR = os.path.dirname(__file__)
 positions = {}
@@ -98,10 +99,87 @@ def writeTikzToFile(filename, text):
     with open(filename, 'a') as file:
         file.write("\\end{tikzpicture}\n")
         file.write("\\end{document}\n")
-        
+
+def run_with_file(treeName, tree, root, filename):
+    treeName = treeName.upper()
+    with open(filename, 'r') as file:
+        for line in file:
+            command = line.strip().lower()
+            if command == 'help':
+                print("--- Help ---")
+                print("Commands:")
+                print("Help - display this message")
+                print("Exit - exit the program")
+                print("Print - print the trees")
+                print("Insert - insert a node into the trees")
+                print("Delete - delete all nodes from the trees")
+                print("Rebalance - rebalance the AVL tree")
+                print("Remove - remove a node from the trees")
+                print("MinMax - find the minimum and maximum values in the trees")
+                print("Draw - generate a TikZ code for the tree and save it to tree.tex")
+                print("-------------")
+                continue
+            elif command == 'exit':
+                break
+            elif command == "print":
+                print(treeName, " tree:")
+                print("In-order:", end=" ")
+                tree.in_order()
+                print("\nPost-order:", end=" ")
+                tree.post_order()
+                print("\nPre-order:", end=" ")
+                tree.pre_order()
+            elif command == 'insert':
+                num_nodes = int(next(file).strip())
+                keys = list(map(int, next(file).strip().split()))
+                if treeName == "BST":
+                    if len(keys) != num_nodes:
+                        print("Number of nodes does not match the number of keys.")
+                        break
+                    for key in keys:
+                        if key < 0:
+                            print("Key must be a positive integer.")
+                            break
+                        tree.insert(key)
+                elif treeName == "AVL":
+                    if len(keys) != num_nodes:
+                        print("Number of nodes does not match the number of keys.")
+                        break
+                    tree.build_tree(keys)
+            elif command == 'delete':
+                tree.delete_all()
+                print(f"All nodes have been deleted from the {treeName} tree.")
+            elif command == 'remove':
+                keys = list(map(int, next(file).strip().split()))
+                for key in keys:
+                    tree.delete(key)
+            elif command == 'find':
+                znajdzka = int(next(file).strip())
+                print(tree.find(znajdzka))
+            elif command == 'minmax':
+                print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n") 
+            elif command == 'rebalance':
+                if treeName == "AVL":
+                    n = tree.count_nodes()
+                    tree.create_backbone()
+                    tree.balance_backbone(n)
+            elif command == 'draw':
+                if treeName == "AVL":
+                    tikz_code = tikz_tree(tree.root)
+                    writeTikzToFile("tree.tex", tikz_code)
+                    print("TikZ code has been generated and saved to tree.tex.")
+                elif treeName == "BST":
+                    tikz_code = tikz_tree(tree)
+                    writeTikzToFile("tree.tex", tikz_code)
+                    print("TikZ code has been generated and saved to tree.tex.")   
+            else:
+                print("Unknown command. Please try again. Type help for more information.")
+
+#
 def chosenTree(treeName, tree, root):
     treeName = treeName.upper()
     while True:
+        
         command = input('command> ').lower()
         if command == 'help':
             print("--- Help ---")
@@ -130,24 +208,33 @@ def chosenTree(treeName, tree, root):
             print("")
         elif command == 'insert':
             if treeName == "BST":
-                num_nodes = int(input('nodes> '))
-                keys = list(map(int, input('insert> ').split()))
-                for key in keys: 
+                num_nodes = int(input('nodes> ').strip())
+                keys = list(map(int, input('insert> ').strip().split()))
+                if len(keys) != num_nodes:
+                    print("Number of nodes does not match the number of keys.")
+                    break
+                for key in keys:
+                    if key < 0:
+                        print("Key must be a positive integer.")
+                        break
                     tree.insert(key)
             
             elif treeName == "AVL":
-                num_nodes = int(input('nodes> '))
-                keys = list(map(int, input('insert> ').split()))
+                num_nodes = int(input('nodes> ').strip())
+                keys = list(map(int, input('insert> ').strip().split()))
+                if len(keys) != num_nodes:
+                    print("Number of nodes does not match the number of keys.")
+                    break
                 tree.build_tree(keys)
         elif command == 'delete':
                 tree.delete_all()
                 print(f"All nodes have been deleted from the {treeName} tree.")
         elif command == 'remove':
-            keys = list(map(int, input('remove> ').split()))
+            keys = list(map(int, input('remove> ').strip().split()))
             for key in keys:
                 tree.delete(key)
         elif command == 'find':
-            znajdzka = int(input('find> '))
+            znajdzka = int(input('find> ').strip())
             print(tree.find(znajdzka))
         elif command == 'minmax':
             print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n")  
@@ -178,8 +265,14 @@ def main():
     bst_root = None
 
     if args.avl:
-        chosenTree("AVL", avl_tree, avl_root)
+        if args.file:
+            run_with_file("AVL", avl_tree, avl_root, args.file)
+        else:
+            chosenTree("AVL", avl_tree, avl_root)
     if args.bst:
-        chosenTree("BST", bst_tree, bst_root)
+        if args.file:
+            run_with_file("BST", bst_tree, bst_root, args.file)
+        else:
+            chosenTree("BST", bst_tree, bst_root)
 if __name__ == "__main__":
     main()
