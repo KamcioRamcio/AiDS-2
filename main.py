@@ -1,5 +1,5 @@
 from bst import TreeNode as BST
-
+from timeit import default_timer as timer
 import avl
 import os
 import argparse
@@ -198,15 +198,19 @@ def chosenTree(treeName, tree, root):
         if command == 'exit':
             break
         if command == "print":
-            print(treeName, " tree:")
-            print("In-order:", end=" ")
+            #print(treeName, " tree:")
+            #print("In-order:", end=" ")
+            start3 = timer()
             tree.in_order()
-            print("\nPost-order:", end=" ")
-            tree.post_order()
-            print("\nPre-order:", end=" ")
-            tree.pre_order()
-            print("")
+            end3 = timer()
+            print("Time elapsed In-order: ", end3-start3)
+            #print("\nPost-order:", end=" ")
+            #tree.post_order()
+            #print("\nPre-order:", end=" ")
+            #tree.pre_order()
+            #print("")
         elif command == 'insert':
+            start = timer()
             if treeName == "BST":
                 num_nodes = int(input('nodes> ').strip())
                 keys = list(map(int, input('insert> ').strip().split()))
@@ -218,7 +222,7 @@ def chosenTree(treeName, tree, root):
                         print("Key must be a positive integer.")
                         break
                     tree.insert(key)
-            
+           
             elif treeName == "AVL":
                 num_nodes = int(input('nodes> ').strip())
                 keys = list(map(int, input('insert> ').strip().split()))
@@ -226,6 +230,8 @@ def chosenTree(treeName, tree, root):
                     print("Number of nodes does not match the number of keys.")
                     break
                 tree.build_tree(keys)
+            end = timer()
+            print("Time elapsed: ", end-start)
         elif command == 'delete':
                 tree.delete_all()
                 print(f"All nodes have been deleted from the {treeName} tree.")
@@ -237,13 +243,18 @@ def chosenTree(treeName, tree, root):
             znajdzka = int(input('find> ').strip())
             print(tree.find(znajdzka))
         elif command == 'minmax':
-            print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n")  
+            start2 = timer()
+            print("Max: ",tree.largest(),"\nMin: ",tree.smallest(),"\n") 
+            end2 = timer()
+            print("Time elapsed Min-Max: ", end2-start2)
         
         elif command == 'rebalance':
+            start4 = timer()
             n = tree.count_nodes()
             tree = tree.create_backbone()
             tree = tree.balance_backbone(n)
-            
+            end4= timer()
+            print("Time elapsed Rebalance: ", end4-start4)
         
         elif command == 'draw':
              #Wygenerowanie kodu TikZ dla drzewa

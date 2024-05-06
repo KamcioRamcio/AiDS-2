@@ -33,7 +33,7 @@ class TreeNode:
     def in_order(self):
         if self.left:
             self.left.in_order()
-        print(self.value)
+        #print(self.value)
         if self.right:
             self.right.in_order()
 #pre_order korzeń, lewy, prawy
@@ -111,7 +111,7 @@ class TreeNode:
             del node
             
     def right_rotate(self, node):
-        print("Rotacja w prawo wokół", node.value)
+        #print("Rotacja w prawo wokół", node.value)
         pivot = node.left
         node.left = pivot.right
         pivot.right = node
@@ -121,7 +121,7 @@ class TreeNode:
         return pivot
 
     def left_rotate(self, node):
-        print("Rotacja w lewo wokół", node.value)
+        #print("Rotacja w lewo wokół", node.value)
         pivot = node.right
         node.right = pivot.left
         pivot.left = node

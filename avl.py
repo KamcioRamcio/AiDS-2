@@ -80,7 +80,7 @@ class AVL:
         
         if node.left:
             self.in_order(node.left)
-        print(node.value)
+        #print(node.value)
         if node.right:
             self.in_order(node.right)
     def post_order(self, node=None):
@@ -91,12 +91,12 @@ class AVL:
             self.post_order(node.left)
         if node.right:
             self.post_order(node.right)
-        print(node.value)
+        #print(node.value)
         
     def pre_order(self, node=None):
         if node is None:
             node = self.root
-        print(node.value)
+        #print(node.value)
         if node.left:
             self.pre_order(node.left)
         if node.right:
@@ -210,7 +210,7 @@ class AVL:
         while node.left:
             node = node.left
         return node.value
-    def biggest(self, node=None):
+    def largest(self, node=None):
         if node is None:
             node = self.root
         while node.right:
